@@ -1,12 +1,9 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { StopwatchStatus } from "../model/types";
 import { useStopwatch } from "../model/useStopwatch";
 import { TimeDisplay } from "./TimeDisplay";
-import { StopwatchControls } from "./StopwatchControls";
+import { StopwatchControls, StopwatchClearButton } from "./StopwatchControls";
 import { StopwatchHeader } from "./StopwatchHeader";
-import { Button } from "@/shared/ui/Button/Button";
-import { ButtonVariant } from "@/shared/ui/Button/Button.types";
-import { IconSparkles } from "@/shared/ui/Icon/icons";
 import styles from "./StopwatchCard.module.css";
 
 interface StopwatchCardProps {
@@ -18,12 +15,6 @@ export const StopwatchCard: React.FC<StopwatchCardProps> = React.memo(({ id, onD
   const { status, actions, timeRef } = useStopwatch();
 
   console.log('Card');
-
-  const clearButton = useMemo(() => (
-    <Button variant={ButtonVariant.CLEAR} onClick={actions.clear} ariaLabel="Clear">
-      <IconSparkles /> Clear
-    </Button>
-  ), [actions.clear]);
 
   return (
     <article className={styles.card} aria-label={`Stopwatch ${id}`}>
@@ -38,7 +29,9 @@ export const StopwatchCard: React.FC<StopwatchCardProps> = React.memo(({ id, onD
           onPause={actions.pause}
           onResume={actions.resume}
         />
-        {status !== StopwatchStatus.IDLE && clearButton}
+        {status !== StopwatchStatus.IDLE && (
+          <StopwatchClearButton onClear={actions.clear} />
+        )}
       </div>
     </article>
   );
